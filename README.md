@@ -1,1 +1,1 @@
-Future repository for figures codes
+Future repository for figure codes
