@@ -15,13 +15,13 @@ load("Grouped_objects/ht_Enrich_Macs.rd")                 # ht has the cluster +
 colnames(hm_zmod)<-gsub("scaled","",colnames(hm_zmod))
 
 
-###--------------------------------------------------------------### 
-#### Function to assigne vector of splitted genes from genelist #### 
-###--------------------------------------------------------------### 
+###-------------------------------------------------------------### 
+#### Function to assign vector of splitted genes from genelist #### 
+###-------------------------------------------------------------### 
 automate_strsplit <- function(df, col, indices) {
   unlist(strsplit(paste0(df[[col]][indices], collapse = ","), split = ","))
 }
-###--------------------------------------------------------------### 
+###-------------------------------------------------------------### 
 
 # Our programs are a combination of modules selected as follows:
 grp_I<-c(43,128,70,38)
@@ -124,3 +124,4 @@ plot_reorderselectedrow_selectedcol+
         axis.title.y = element_blank()  )+
   ggtitle("Relative enrichment of signatures by clusters \n(Macs from enriched samples, manual reordering)")
 dev.off()
+
