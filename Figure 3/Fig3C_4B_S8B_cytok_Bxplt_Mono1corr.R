@@ -6,14 +6,14 @@ setwd("G:/Mon Drive/UG_metacells/Figures paper Aout/")
 
 load("./Grouped_objects/norm_ut_a_ml.rd")
 load("./Grouped_objects/dfall_IBD_all_df3CD.rd")
-load("./Grouped_objects/ord_pval_pos_mono1.rd") # subtypes sorted by higher to lower correlation to Mono1 (top 29) created in Fig2H_corr.R
+load("./Grouped_objects/ord_pval_pos_mono1.rd") # subtypes sorted by higher to lower correlation to Mono1 created in Fig2H_corr.R
 load("./Grouped_objects/ord_pval_pos_mono3.rd") # created in Fig2H_corr.R
 
 #Adapt for Mono / Macs :
 dfall_all_df3CD$Group_v2 <- gsub("\\[MoMac\\] (Mono\\d+)", "[Mono] \\1", dfall_all_df3CD$Group_v2)
 dfall_all_df3CD$Group_v2 <- gsub("\\[MoMac\\] (Macro\\d+)", "[Macro] \\1", dfall_all_df3CD$Group_v2)  
 
-genes_2see<-c("IFNG","CSF2","TNF","CXCL10","CXCR3","IL23A","CCL2","CXCL1")
+genes_2see<-c("IFNG","CSF2","TNF","CXCL10","CXCR3","IL23A","CCL2","CXCL1","CXCL9","CXCL11","CXCL13","CXCR5","CD274","PDCD1","CSF3")
 norm_ut_df <- as.data.frame(as.matrix(norm_ut_a_ml[,genes_2see]) )
 norm_ut_df$names <- rownames(norm_ut_a_ml[,genes_2see])
 merged_data <- inner_join(norm_ut_df, dfall_all_df3CD, by = "names")
@@ -46,7 +46,7 @@ New_names_m1_nl<-gsub("^\\[.*\\] ","",New_names_m1) # names without lineage cate
 New_names_m1_nl[which(New_names_m1_nl=="NK-like"):which(New_names_m1_nl=="iaDCa")]<-paste0("**",New_names_m1_nl[which(New_names_m1_nl=="NK-like"):which(New_names_m1_nl=="iaDCa")],"**") # Make the enriched one as bold text
 
 
-pdf("./Figure 3/Fig3C_4B_cytok_Bxplt_Mono1corr.pdf",width = 4, height = 7)
+pdf("./Figure 3/Fig3C_4B_S8B_cytok_Bxplt_Mono1corr.pdf",width = 4, height = 7)
 the_gene=genes_2see[1]
 # First figure to get the names only, next figures are the boxplots only by gene
 eval(parse(text=paste0("print(ggplot(ctyp_sample_norm_cytok[which(ctyp_sample_norm_cytok$Group_v2%in%c(ord_pval_pos_mono1,'[Mono] Mono1') ),], aes(x =Group_v2, y =",the_gene,"))+
