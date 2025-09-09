@@ -72,3 +72,52 @@ for(the_gene in genes_2see){
   # )))
 }
 dev.off()
+
+
+
+
+
+
+# Same but with Progeny
+library(progeny)
+library(tibble)
+model <- progeny::model_human_full
+model_500 <- model %>%
+  group_by(pathway) %>%
+  slice_min(order_by = p.value, n = 500)
+
+model_500$pathway<-gsub("-","_",model_500$pathway)
+pthw<-names(table(model_500$pathway))
+
+pthw<-c("NFkB","JAK_STAT","MAPK","Hypoxia")
+allsum<-Matrix::colSums(log1p(t(norm_ut_a_ml)))
+
+for(Mod_score in pthw){
+  print(Mod_score)
+  ilist<-intersect(model_500[which(model_500$pathway==Mod_score&model_500$weight>0),]$gene,rownames(t(norm_ut_a_ml)))
+  currentscore<-Matrix::colSums(log(1+t(norm_ut_a_ml)[ilist,,drop=F]))/allsum
+  eval(parse(text=paste0("merged_data$",Mod_score,"<-as.vector(scale(currentscore, center = TRUE, scale = TRUE))")))
+}
+
+mean_expression <- merged_data %>%
+  group_by(sample, Group_v2) %>%
+  summarise(across(pthw, mean, na.rm = TRUE))
+
+ctyp_sample_norm_prog<-as.data.frame(mean_expression)
+
+df3CD_mono1hi<-c("n17","n47","n33","n37","128","138","187","181","n13")
+ctyp_sample_norm_prog <- ctyp_sample_norm_prog %>%
+  mutate(Sample_Type = ifelse(sample %in% df3CD_mono1hi, "Mono1hi", "Mono1lo"))
+
+nn_m1_nl<-append(New_names_m1_nl[20:29],'**Mono1**')
+names(nn_m1_nl)[11]<-"[Mono] Mono1"
+pdf("./Figure 4/Fig4E_S9B_mono1_progeny.pdf",width = 7, height = 6)
+for(the_gene in pthw){
+  eval(parse(text=paste0("print(ggplot(ctyp_sample_norm_prog[which(ctyp_sample_norm_prog$Group_v2%in%c(ord_pval_pos_mono1[20:29],'[Mono] Mono1') ),], aes(x =Group_v2, y =",the_gene,"))+
+  geom_boxplot(lwd=1, color='black', fill='grey', alpha=0.5)+scale_x_discrete(limits = c(ord_pval_pos_mono1[20:29],'[Mono] Mono1'), labels=nn_m1_nl ) +xlab('')+
+  geom_jitter(stat='identity',inherit.aes = TRUE,shape=16, position=position_jitter(0.2),size=1)+theme_minimal()+ 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 01,size=rel(2)),axis.text.y = ggtext::element_markdown(size=rel(1.75)))+ ylab('Mean ",the_gene," normalized\nexpression by sample')+
+  coord_flip()+ggtitle('",the_gene," in Subtypes positively correlated to Mono1') )"
+  )))
+}
+dev.off()
