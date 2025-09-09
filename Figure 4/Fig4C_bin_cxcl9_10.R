@@ -1,9 +1,14 @@
+## First,, for each slide, we compute 
+
+library(ggpubr)
+
+setwd("G:/Mon Drive/UG_metacells/Figures paper Aout/")
 
 spl="GIM33_InfROI1"
 
-load(file=paste0("./SubsetsAppObj/dgcmtx_raw_",spl,".rd"))
-load(file=paste0("G:/Mon Drive/UG_metacells/Xenium/SubsetsAppObj/meta_annot_june5_",spl,".rd"))
-load(paste0(googlepath,"/SubsetsAppObj/meta_annot_",spl, ".rd"))
+load(paste0("./Grouped_objects/Xenium/dgcmtx_raw_",spl,".rd"))
+load(paste0("./Grouped_objects/Xenium/meta_annot_june5_",spl,".rd"))
+load(paste0("./Grouped_objects/Xenium/meta_annot_",spl, ".rd"))
 set.seed(42)
 
 meta_annot_perso$CXCL9<-dgcmtx_raw_counts[,"CXCL9"]
@@ -27,6 +32,7 @@ rect_data <- bind_rows(rect_1a,rect_2a,rect_3a,rect_4a,rect_5a,
 
 rect_list <- list(rect_1a,rect_2a,rect_3a,rect_4a,rect_5a,rect_1b,rect_2b,rect_3b,rect_4b,rect_5b)
 subsets <- list()
+nb_select=500  # Subset for 500 cells 
 for (i in seq_along(rect_list)) { 
   rect <- rect_list[[i]]
   subset <- subset(meta_annot_perso, x>=rect$xmin & x<=rect$xmax & y>=rect$ymin & y<=rect$ymax)
@@ -45,7 +51,7 @@ lapply(subsets,function(x) dim(x))
 tib_meta<-bind_rows(lapply(names(subsets), function(x) tibble(grp = x, num = subsets[[x]])))  #paste all subsets metadata in one tibble with a column info of bin
 tib_meta$grp2<-paste0("bin_",gsub("(.*)_(.*)[a-z]$","\\2",tib_meta$grp))
 
-save(tib_meta,file=paste0("G:/Mon Drive/UG_metacells/Xenium/SubsetsAppObj/tib_meta_v4_33roi1.rd"))
+save(tib_meta,file=paste0("./Grouped_objects/Xenium/tib_meta_v4_33roi1.rd"))
 
 
 
@@ -53,9 +59,9 @@ save(tib_meta,file=paste0("G:/Mon Drive/UG_metacells/Xenium/SubsetsAppObj/tib_me
 
 spl="GIM33_InfROI2"
 
-load(file=paste0("./SubsetsAppObj/dgcmtx_raw_",spl,".rd"))
-load(file=paste0("G:/Mon Drive/UG_metacells/Xenium/SubsetsAppObj/meta_annot_june5_",spl,".rd"))
-load(paste0(googlepath,"/SubsetsAppObj/meta_annot_",spl, ".rd"))
+load(paste0("./Grouped_objects/Xenium/dgcmtx_raw_",spl,".rd"))
+load(paste0("./Grouped_objects/Xenium/meta_annot_june5_",spl,".rd"))
+load(paste0("./Grouped_objects/Xenium/meta_annot_",spl, ".rd"))
 set.seed(42)
 
 meta_annot_perso$CXCL9<-dgcmtx_raw_counts[,"CXCL9"]
@@ -97,14 +103,14 @@ lapply(subsets,function(x) dim(x))
 tib_meta<-bind_rows(lapply(names(subsets), function(x) tibble(grp = x, num = subsets[[x]])))  #paste all subsets metadata in one tibble with a column info of bin
 tib_meta$grp2<-paste0("bin_",gsub("(.*)_(.*)[a-z]$","\\2",tib_meta$grp))
 
-save(tib_meta,file=paste0("G:/Mon Drive/UG_metacells/Xenium/SubsetsAppObj/tib_meta_v4_33roi2.rd"))
+save(tib_meta,file=paste0("./Grouped_objects/Xenium/tib_meta_v4_33roi2.rd"))
 
 
 spl="GIM38_InfROI1"
 
-load(file=paste0("./SubsetsAppObj/dgcmtx_raw_",spl,".rd"))
-load(file=paste0("G:/Mon Drive/UG_metacells/Xenium/SubsetsAppObj/meta_annot_june5_",spl,".rd"))
-load(paste0(googlepath,"/SubsetsAppObj/meta_annot_",spl, ".rd"))
+load(paste0("./Grouped_objects/Xenium/dgcmtx_raw_",spl,".rd"))
+load(paste0("./Grouped_objects/Xenium/meta_annot_june5_",spl,".rd"))
+load(paste0("./Grouped_objects/Xenium/meta_annot_",spl, ".rd"))
 set.seed(42)
 
 meta_annot_perso$CXCL9<-dgcmtx_raw_counts[,"CXCL9"]
@@ -146,7 +152,7 @@ lapply(subsets,function(x) dim(x))
 tib_meta<-bind_rows(lapply(names(subsets), function(x) tibble(grp = x, num = subsets[[x]])))  #paste all subsets metadata in one tibble with a column info of bin
 tib_meta$grp2<-paste0("bin_",gsub("(.*)_(.*)[a-z]$","\\2",tib_meta$grp))
 
-save(tib_meta,file=paste0("G:/Mon Drive/UG_metacells/Xenium/SubsetsAppObj/tib_meta_v4_38roi1.rd"))
+save(tib_meta,file=paste0("./Grouped_objects/Xenium/tib_meta_v4_38roi1.rd"))
 
 
 
@@ -154,9 +160,9 @@ save(tib_meta,file=paste0("G:/Mon Drive/UG_metacells/Xenium/SubsetsAppObj/tib_me
 
 spl="GIM38_InfROI2"
 
-load(file=paste0("./SubsetsAppObj/dgcmtx_raw_",spl,".rd"))
-load(file=paste0("G:/Mon Drive/UG_metacells/Xenium/SubsetsAppObj/meta_annot_june5_",spl,".rd"))
-load(paste0(googlepath,"/SubsetsAppObj/meta_annot_",spl, ".rd"))
+load(paste0("./Grouped_objects/Xenium/dgcmtx_raw_",spl,".rd"))
+load(paste0("./Grouped_objects/Xenium/meta_annot_june5_",spl,".rd"))
+load(paste0("./Grouped_objects/Xenium/meta_annot_",spl, ".rd"))
 set.seed(42)
 
 meta_annot_perso$CXCL9<-dgcmtx_raw_counts[,"CXCL9"]
@@ -198,25 +204,25 @@ lapply(subsets,function(x) dim(x))
 tib_meta<-bind_rows(lapply(names(subsets), function(x) tibble(grp = x, num = subsets[[x]])))  #paste all subsets metadata in one tibble with a column info of bin
 tib_meta$grp2<-paste0("bin_",gsub("(.*)_(.*)[a-z]$","\\2",tib_meta$grp))
 
-save(tib_meta,file=paste0("G:/Mon Drive/UG_metacells/Xenium/SubsetsAppObj/tib_meta_v4_38roi2.rd"))
+save(tib_meta,file=paste0("./Grouped_objects/Xenium/tib_meta_v4_38roi2.rd"))
 
 #---------------------------------------------------------------------------------------------------------#
 
 
-load("G:/Mon Drive/UG_metacells/Xenium/SubsetsAppObj/tib_meta_v4_33roi1.rd")
+load("./Grouped_objects/Xenium/tib_meta_v4_33roi1.rd")
 tib_m33r1<-aggregate(tib_meta$num$CXCL9, by=list(tib_meta$grp), FUN=mean)
-load("G:/Mon Drive/UG_metacells/Xenium/SubsetsAppObj/tib_meta_v4_33roi2.rd")
+load("./Grouped_objects/Xenium/tib_meta_v4_33roi2.rd")
 tib_m33r2<-aggregate(tib_meta$num$CXCL9, by=list(tib_meta$grp), FUN=mean)
-load("G:/Mon Drive/UG_metacells/Xenium/SubsetsAppObj/tib_meta_v4_38roi1.rd")
+load("./Grouped_objects/Xenium/tib_meta_v4_38roi1.rd")
 tib_m38r1<-aggregate(tib_meta$num$CXCL9, by=list(tib_meta$grp), FUN=mean)
-load("G:/Mon Drive/UG_metacells/Xenium/SubsetsAppObj/tib_meta_v4_38roi2.rd")
+load("./Grouped_objects/Xenium/tib_meta_v4_38roi2.rd")
 tib_m38r2<-aggregate(tib_meta$num$CXCL9, by=list(tib_meta$grp), FUN=mean)
 
 infl_gn<-do.call("rbind", list(tib_m33r1, tib_m33r2, tib_m38r1,tib_m38r2))
 colnames(infl_gn)<-c("sample_id","value")
 infl_gn$bin<-paste0("",gsub("(.*)_(.*)[a-z]$","\\2",infl_gn$sample_id))
 
-pdf(paste0("G:/Mon Drive/UG_metacells/Figures paper/Figure 5/Fig5C_bin_cxcl9_10.pdf"),width = 5,height = 7)
+pdf(paste0("./Figure 4/Fig4C_bin_cxcl9_10.pdf"),width = 5,height = 7)
 ggplot(infl_gn, aes(x = factor(bin), y = value,  color="all",
                              fill = "all")) +scale_y_continuous(trans = "log1p")+
   geom_boxplot(width=0.8, size=0.95, alpha=0.8,outlier.alpha = 0) + geom_point(position = position_jitterdodge(jitter.width =0.2 ),size=rel(1.2), alpha=0.5 )+
@@ -227,14 +233,13 @@ ggplot(infl_gn, aes(x = factor(bin), y = value,  color="all",
                      axis.line = element_line(size = rel(1.5)), axis.ticks = element_line(size = rel(1.5)))+#guides(fill=guide_legend(nrow=2,byrow=TRUE))+
   scale_fill_manual(values = alpha("#8E8EA3",4))+scale_color_manual(values = "#555568")
 
-
-load("G:/Mon Drive/UG_metacells/Xenium/SubsetsAppObj/tib_meta_v4_33roi1.rd")
+load("./Grouped_objects/Xenium/tib_meta_v4_33roi1.rd")
 tib_m33r1<-aggregate(tib_meta$num$CXCL10, by=list(tib_meta$grp), FUN=mean)
-load("G:/Mon Drive/UG_metacells/Xenium/SubsetsAppObj/tib_meta_v4_33roi2.rd")
+load("./Grouped_objects/Xenium/tib_meta_v4_33roi2.rd")
 tib_m33r2<-aggregate(tib_meta$num$CXCL10, by=list(tib_meta$grp), FUN=mean)
-load("G:/Mon Drive/UG_metacells/Xenium/SubsetsAppObj/tib_meta_v4_38roi1.rd")
+load("./Grouped_objects/Xenium/tib_meta_v4_38roi1.rd")
 tib_m38r1<-aggregate(tib_meta$num$CXCL10, by=list(tib_meta$grp), FUN=mean)
-load("G:/Mon Drive/UG_metacells/Xenium/SubsetsAppObj/tib_meta_v4_38roi2.rd")
+load("./Grouped_objects/Xenium/tib_meta_v4_38roi2.rd")
 tib_m38r2<-aggregate(tib_meta$num$CXCL10, by=list(tib_meta$grp), FUN=mean)
 
 infl_gn<-do.call("rbind", list(tib_m33r1, tib_m33r2, tib_m38r1,tib_m38r2))
