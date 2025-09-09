@@ -99,7 +99,7 @@ ord_pval_pos<-mlt_spe_cor_pos[order(mlt_spe_cor_pos$pval,decreasing = T),"group2
 
 
 
-pdf("./Figure 2/Fig2H_mo1mo3_corr.pdf",width = 8, height = 7)
+pdf("./Figure 2/Fig2H_S8A_mo1mo3_corr.pdf",width = 8, height = 7)
 
 # Plot the Top positively-cortrelated subtypes to Mono1 distribution
 print(ggplot(mlt_spe_cor_pos, aes(x =group2, y =mlogpval, color=pos_cor, fill=pos_cor))+
@@ -171,5 +171,6 @@ print(ggplot(mlt3_spe_cor_neg, aes(x =group2, y =mlogpval, color=pos_cor, fill=p
 )
 
 dev.off()
+
 
 
