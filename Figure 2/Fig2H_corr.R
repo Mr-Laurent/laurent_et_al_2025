@@ -5,16 +5,7 @@ library(dplyr)
 library(reshape2)
 library(Matrix)
 library(ggplot2)
-library(pl)
-
-
-library(scales)
-library(RColorBrewer)
-library(seriation)
-library(dplyr)
-library(tidyverse)
-library(ggtext)
-
+library(plyr)
 
 setwd("G:/Mon Drive/UG_metacells/Figures paper Aout/")
 load("Grouped_objects/freqs3_no69_noadj_nolog.rd")  # subtypes frequency by patients
@@ -170,5 +161,6 @@ print(ggplot(mlt3_spe_cor_neg, aes(x =group2, y =mlogpval, color=pos_cor, fill=p
 )
 
 dev.off()
+
 
 
