@@ -1,11 +1,12 @@
 
 # Parts from "Subtypes_cor_mono1_3_cytok.R
-
 library(dplyr)
 library(reshape2)
 library(Matrix)
 library(ggplot2)
 library(plyr)
+
+
 
 setwd("G:/Mon Drive/UG_metacells/Figures paper Aout/")
 load("Grouped_objects/freqs3_no69_noadj_nolog.rd")  # subtypes frequency by patients
@@ -46,6 +47,11 @@ mlt_spe_cor <- mlt_spe_cor %>%
 mlt_spe_cor <- mlt_spe_cor %>%
   mutate(pos_cor = if_else(spear_cor < 0, "Neg", "Pos"))
 
+mlt_spe_cor_pos<-mlt_spe_cor[which(mlt_spe_cor$pos_cor=="Pos"),]
+ord_pval_pos<-rownames(mlt_spe_cor_pos[order(mlt_spe_cor_pos$pval,decreasing = T),] )
+ord_pval_pos_mono1<-ord_pval_pos
+save(ord_pval_pos_mono1,file="./Grouped_objects/ord_pval_pos_mono1.rd")
+
 # Correlation of subtypes to Mono3 distribution
 mlt3_spe_cor<-as.data.frame(reshape2::melt(cormat_sp["[MoMac] Mono3",-which(colnames(cormat_sp)=="[MoMac] Mono3")])  )
 mlt3_spe_pval<-as.data.frame(reshape2::melt(p_values3["[MoMac] Mono3",-which(colnames(cormat_sp)=="[MoMac] Mono3")]) )
@@ -58,6 +64,10 @@ mlt3_spe_cor <- mlt3_spe_cor %>%
 mlt3_spe_cor <- mlt3_spe_cor %>%
   mutate(pos_cor = if_else(spear_cor < 0, "Neg", "Pos"))
 
+mlt3_spe_cor_pos<-mlt3_spe_cor[which(mlt3_spe_cor$pos_cor=="Pos"),]
+ord3_pval_pos<-rownames(mlt3_spe_cor_pos[order(mlt3_spe_cor_pos$pval,decreasing = T),] )
+ord_pval_pos_mono3<-ord3_pval_pos
+save(ord_pval_pos_mono3,file="./Grouped_objects/ord_pval_pos_mono3.rd")
 
 ord_pval<-rownames(mlt_spe_cor[order(mlt_spe_cor$pval,decreasing = T),] )
 
@@ -161,6 +171,5 @@ print(ggplot(mlt3_spe_cor_neg, aes(x =group2, y =mlogpval, color=pos_cor, fill=p
 )
 
 dev.off()
-
 
 
