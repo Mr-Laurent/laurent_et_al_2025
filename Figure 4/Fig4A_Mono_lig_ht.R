@@ -12,6 +12,21 @@ reg=1e-6
 
 load("./Grouped_objects/LigRec_MoMac_lineages_cytok_fev25.rd")
 load("./Grouped_objects/all_cytokines_liste.rd")
+load("./Grouped_objects/umitab_all_maj_lin_fev25.rd") # Sparse matrix of counts (row= individual cell, column= gene)
+load("./Grouped_objects/dfall_IBD_all_df3CD.rd")      # Metadata by cell (name, metacell, disease, celltype ...)
+
+#Adapt for Mono / Macs :
+dfall_all_df3CD$Group_v2 <- gsub("\\[MoMac\\] (Mono\\d+)", "[Mono] \\1", dfall_all_df3CD$Group_v2)
+dfall_all_df3CD$Group_v2 <- gsub("\\[MoMac\\] (Macro\\d+)", "[Macro] \\1", dfall_all_df3CD$Group_v2)  
+
+# Compute mean expression by gene in each subtypes
+ctyp_mapping <- dfall_all_df3CD$Group_v2[match(rownames(umitab_all_maj_lin), dfall_all_df3CD$names)]
+ctyp_factors <- factor(ctyp_mapping)
+ctyp_means <- do.call(rbind, by(seq_len(nrow(umitab_all_maj_lin)), ctyp_factors, function(idx) {
+  colMeans(as.matrix(umitab_all_maj_lin[idx, , drop = FALSE]))
+}))
+
+
 
 #List of ligands to plot
 mono_lig_cytok<-c(as.vector( unique(interaction_stats$Ligand[interaction_stats$subtype1=="Mono"]) ),
@@ -20,36 +35,26 @@ mono_lig_cytok<-c(as.vector( unique(interaction_stats$Ligand[interaction_stats$s
 
 mo_ctyp=c("[Mono] Mono5","[Mono] Mono4","[Mono] Mono3","[Mono] Mono1")
 
-load("./Grouped_objects/ctyp_means_fev25.rd")
 m_all_ctyp<-as.matrix(as.data.frame(t(ctyp_means)))
 m_lig_ctyp_mm_mo<-m_all_ctyp[mono_lig_cytok,mo_ctyp]
+#save(m_lig_ctyp_mm_mo,file="m_lig_ctyp_mm_mo_fev25.rd")
 
-M_LR_GRP_normed<-(log2((reg+(m_lig_ctyp_mm_mo))/(reg+rowMeans(m_lig_ctyp_mm_mo))))
-cormat_genes_M_LR=cor(t(M_LR_GRP_normed[,c("[Mono] Mono1","[Mono] Mono3")]) ) 
-cormat_genes_M_LR=cor(t(M_LR_GRP_normed) ) 
-M_LR_GRP_ordgw_mo1mo3=rownames(M_LR_GRP_normed)[get_order(seriate(as.dist(1-cormat_genes_M_LR),method = "OLO")) ]
 
-#save(m_lig_ctyp_mm_mo,file="C:/Users/E134321B/Desktop/Work stuff/Trebuchet/testfig/2025_02_13_Anew_restrictLigRec/m_lig_ctyp_mm_mo_fev25.rd")
 
 ###---###  USE  TGLKMEANS, ONLY ON LINUX, TO REORDER GENES BASED ON THEIR EXPRESSION IN MONO 1 AND 3 ONLY
-
-library(tglkmeans)
-
+# library(tglkmeans)
 # load("m_lig_ctyp_mm_mo_fev25.rd")
 # reg=1e-6
 # M_LR_GRP<-m_lig_ctyp_mm_mo
 # M_LR_GRP_normed<-(log2((reg+(M_LR_GRP))/(reg+rowMeans(M_LR_GRP))))
-
-mo1mo3<-M_LR_GRP_normed[,c("[Mono] Mono3","[Mono] Mono1")]
-
-m_lig_ctyp_mm_k15 <- TGL_kmeans_tidy(M_LR_GRP_normed,k = 15,metric = "euclid",verbose = TRUE,seed = 42)
-mo1mo3_k15 <- TGL_kmeans_tidy(mo1mo3,k = 15,metric = "euclid",verbose = TRUE,seed = 42)
-
-
+#
+# mo1mo3<-M_LR_GRP_normed[,c("[Mono] Mono3","[Mono] Mono1")]
+# 
+# m_lig_ctyp_mm_k15 <- TGL_kmeans_tidy(M_LR_GRP_normed,k = 15,metric = "euclid",verbose = TRUE,seed = 42)
+# mo1mo3_k15 <- TGL_kmeans_tidy(mo1mo3,k = 15,metric = "euclid",verbose = TRUE,seed = 42)
 # save(m_lig_ctyp_mm_k15,file="m_lig_ctyp_mm_mo_k15_fev25.rd")
 # save(mo1mo3_k15,file="mo1mo3_mo_k15_fev25.rd")
 ###---###  
-load("./Grouped_objects/m_lig_ctyp_mm_mo_k15_fev25.rd")
 load("./Grouped_objects/mo1mo3_mo_k15_fev25.rd")
 
 
@@ -67,6 +72,10 @@ maketools<-function(M_LR_GRP){
   return(new("Myobj",ordgw=M_LR_GRP_ordgw,melt=M_LR_GRP_melt))
 }
 
+
+# m_lig_ctyp_mm_mo has the mean expression of each gene for each monocyte subtype
+# Then, maketools() compute the enrichment of a gene in a subtype relative to the whole Mono subset 
+#  It uses a kind of log2 fold change to the mean, instead of a z-score, to better represent the relative differences
 gg_lig_ct_mm_mo<-maketools(m_lig_ctyp_mm_mo)
 colnames(gg_lig_ct_mm_mo@melt)<-c("Ligand","subtype","value")
 
@@ -82,7 +91,7 @@ ggplot(gg_lig_ct_mm_mo@melt, aes(x = Ligand, y = subtype, fill = value)) +
                      plot.margin = unit(c(0.2, 0.2, 0.2, 0.2),"cm"),
                      legend.position = "right")+ geom_hline(yintercept = 0.5 + 0:length(unique(gg_lig_ct_mm_mo@melt$subtype)), colour = "black", size = 0.05) 
 
-# From this first clustering of cytokine expression based on Mono1 and Mono3 expression, I rearranged manually some genes for a smoother figure
+# From this first clustering of cytokine expression based on Mono1 and Mono3 expression, I manually rearranged some genes for a smoother figure
 genes_lst<-"CXCL10,SEMA4A,LTB,EBI3,CCL19,CD274,INHBA,SPP1,CCL2,CXCL5,CLU,CXCL9,CXCL1,CSF1,CXCL11,IL6,TNFSF14,CSF3,IL1A,TNFSF15,CSF2,IL1RN,CCL5,CCL22,CXCL8,TNF,CLCF1,CCL3,CCL4,CCL20,IL23A,IL1B,CCL4L2,CCL7,EREG,ADM,VEGFA,PDGFB,IL10,TNFSF12,HBEGF,APLP2,THBS1,SEMA4D,CXCL14,IL15,OSM,TNFSF13,TNFSF13B,AREG,CXCL16,PLAU,TGFB1,TNFSF10,NRG1,RNASET2,LRPAP1,IL16,IL18,PDGFC,VEGFB,CXCL12,IGF1,CCL18,APOE"
 
 
@@ -98,4 +107,3 @@ ggplot(gg_lig_ct_mm_mo@melt, aes(x = Ligand, y = subtype, fill = value)) +
                      legend.position = "right")+ geom_hline(yintercept = 0.5 + 0:length(unique(gg_lig_ct_mm_mo@melt$subtype)), colour = "black", size = 0.05) 
 
 dev.off()
-
