@@ -21,7 +21,6 @@ mono_lig_cytok<-c(as.vector( unique(interaction_stats$Ligand[interaction_stats$s
 mo_ctyp=c("[Mono] Mono5","[Mono] Mono4","[Mono] Mono3","[Mono] Mono1")
 
 load("./Grouped_objects/ctyp_means_fev25.rd")
-load("C:/Users/E134321B/Desktop/Work stuff/Trebuchet/testfig/2025_02_13_Anew_restrictLigRec/ctyp_norm_means_fev25.rd")
 m_all_ctyp<-as.matrix(as.data.frame(t(ctyp_means)))
 m_lig_ctyp_mm_mo<-m_all_ctyp[mono_lig_cytok,mo_ctyp]
 
@@ -99,3 +98,4 @@ ggplot(gg_lig_ct_mm_mo@melt, aes(x = Ligand, y = subtype, fill = value)) +
                      legend.position = "right")+ geom_hline(yintercept = 0.5 + 0:length(unique(gg_lig_ct_mm_mo@melt$subtype)), colour = "black", size = 0.05) 
 
 dev.off()
+
