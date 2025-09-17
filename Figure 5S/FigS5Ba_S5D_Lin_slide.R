@@ -70,7 +70,7 @@ sig_Mono<-unlist(strsplit("CLEC4E,RETN,FCN1,LILRA5,MARCO,MCEMP1,FCAR,CD93,ANPEP,
 sig_Neutro<-unlist(strsplit("CXCR2,MME",split=','))
 sig_pDC<-unlist(strsplit("GZMB,CXCR3,LILRA4,TCL1A",split=','))
 sig_aDC<-unlist(strsplit("CCR7,LAD1,FSCN1,LAMP3",split=','))
-sig_iaDC<-unlist(strsplit("CXCL9,CXCL10,C15orf48,SRC",split=',')) # permet de se restreindre à ceux proches de l'ulcération
+sig_iaDC<-unlist(strsplit("CXCL9,CXCL10,C15orf48,SRC",split=',')) # permet de se restreindre Ã  ceux proches de l'ulcÃ©ration
 sig_DC1<-unlist(strsplit("MYLK,CADM1,PPY",split=','))
 sig_DC2_3<-unlist(strsplit("CD1C,FCER1A,CLEC10A",split=','))
 
