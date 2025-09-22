@@ -640,7 +640,7 @@ server <- function(input, output, session) {
                                                                                                                     vjust = input$vjust_stat,tip.length = 0, 
                                                                                                                     symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), 
                                                                                                                                        symbols = c("****", "***", "**", "*", "ns")),
-                                                                                                                    hide.ns=TRUE)+scale_x_discrete(limits=bx_ord)                                  # En réordonnant on corrige le bazar de stat_compare_means qui change les annotation de X
+                                                                                                                    hide.ns=TRUE)+scale_x_discrete(limits=bx_ord)                                  # En rÃ©ordonnant on corrige le bazar de stat_compare_means qui change les annotation de X
             print("p4 done")
           }else if (input$choose_stats=="Numeric stats - vs mean") {
             clr_ln_score="#444444"
@@ -714,7 +714,7 @@ server <- function(input, output, session) {
                                                                                                                     vjust = input$vjust_stat,tip.length = 0, 
                                                                                                                     symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), 
                                                                                                                                        symbols = c("****", "***", "**", "*", "ns")),
-                                                                                                                    hide.ns=TRUE)+scale_x_discrete(limits=bx_ord)                                  # En réordonnant on corrige la merde de stat_compare_means qui change les annotation de X
+                                                                                                                    hide.ns=TRUE)+scale_x_discrete(limits=bx_ord)                                  # En rÃ©ordonnant on corrige la merde de stat_compare_means qui change les annotation de X
             print("p4 done")
           }else if (input$choose_stats=="Numeric stats - vs mean") {
             results_wilcoxon$p_adj<-format(results_wilcoxon$p_adj,scientific=TRUE, digits=3)
