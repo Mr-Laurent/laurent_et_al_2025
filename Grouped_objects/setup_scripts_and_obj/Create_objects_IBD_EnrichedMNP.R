@@ -514,3 +514,37 @@ Createobj_mnpsub(object = "DC",vm_VarmeanThres = 1.5)
 
 ##----------------------------------------------------------------## 
 
+
+## Create an object with Macs program names and the associated genes:  
+rm(list=ls())
+load("genelist_16nov22_Macs.rd")
+
+automate_strsplit <- function(df, col, indices) {
+  unlist(strsplit(paste0(df[[col]][indices], collapse = ","), split = ","))
+}
+
+grp_I<-c(43,128,70,38)
+grp_II<-c(8,13)
+grp_III<-c(131,133,95,40,66)
+grp_IV<-c(99,25,33)
+grp_V<-c(55,6,50,21,31)
+grp_VI<-c(16,81,58,119)
+grp_VII<-c(143,27,12,14)
+grp_VIII<-c(19,71,123,18,144)
+grp_IX<-c(28,83,48,103,49,141,53,126)
+grp_X<-c(140,72,94,106)
+grp_XI<-c(4,10,73)
+grp_XII<-c(93,111,90,107)
+grp_XIII<-c(11,7,65,74,102)
+grp_XIV<-c(20,52,54,34,113,108,37,60,142,121,116,87,120)
+grp_XV<-c(46,77,125,2,3,44,56)
+grp_XVI<-c(39)
+grp_XVII<-c(84,88)
+
+Modgene<-list()
+for(i in ls(pattern = "^grp_")){
+  eval(parse(text=paste0("Modgene[['",i,"']]<- automate_strsplit(genelist,'Gens',",i,")")))
+}
+
+save(Modgene, file="Modgene_Macs_enr.rd")
+
