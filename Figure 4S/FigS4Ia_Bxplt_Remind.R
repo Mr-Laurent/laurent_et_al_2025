@@ -6,7 +6,7 @@ library(tidyverse)
 
 setwd("G:/Mon Drive/UG_metacells/Figures paper Aout/")
 # Load the metadata and count matrix from Ngollo cohort
-load("./Grouped_objects/minipheno_AllezNgollo_postop_goodRemRec_sig.rd")
+load("./Grouped_objects/RNAseq_REMIND/minipheno_AllezNgollo_postop_goodRemRec_sig.rd")
 load("./Grouped_objects/genelist_16nov22_Macs.rd")
 
 miniphenoM0I<-minipheno[which(minipheno$`location:ch1`%in%c("M0I")),]
@@ -84,3 +84,4 @@ sig_rec<-c("Signature I"="I_Transition A","Signature II"="II_OXPHOS","Signature 
 pdf(paste0("./Figure 4S/FigS4Ia_Bxplt_Remind2.pdf"),width =6,height = 7.5)
 all_sig_comp_BR("M0I")
 dev.off()
+
