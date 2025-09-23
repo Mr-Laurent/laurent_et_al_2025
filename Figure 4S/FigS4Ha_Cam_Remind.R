@@ -16,7 +16,7 @@ setwd("G:/Mon Drive/UG_metacells/Figures paper Aout/")
 
 
 # Load the metadata and count matrix from Ngollo cohort
-load("./Grouped_objects/minipheno_AllezNgollo_postop_goodRemRec_sig.rd")
+load("./Grouped_objects/RNAseq_REMIND/minipheno_AllezNgollo_postop_goodRemRec_sig.rd")
 load("./Grouped_objects/genelist_16nov22_Macs.rd")
 
 miniphenoM0I<-minipheno[which(minipheno$`location:ch1`%in%c("M0I")),]
@@ -173,4 +173,5 @@ all_sig_comp_CAMrutCT<-function(sub_set){
 pdf(paste0("./Figure 4S/Fig2G_M0I_DP_CamRut_tmCT.pdf"),width =9,height = 7)
 all_sig_comp_CAMrutCT("M0I")
 dev.off()
+
 
