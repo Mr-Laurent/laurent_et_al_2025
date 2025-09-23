@@ -1,4 +1,4 @@
-library(Matrix)
+/library(Matrix)
 library(ggplot2)
 library(dplyr)
 library(ggpubr)
@@ -10,10 +10,10 @@ library(tidyr)  # For pivot_wider
 `%ni%` <- Negate(`%in%`)
 
 setwd("G:/Mon Drive/UG_metacells/Figures paper Aout/")
-load("Grouped_objects/zonegradient_v4_33roi1_500cells.rd")
-load("Grouped_objects/zonegradient_v4_33roi2_500cells.rd")
-load("Grouped_objects/zonegradient_v4_38roi1_500cells.rd")
-load("Grouped_objects/zonegradient_v4_38roi2_500cells.rd")
+load("Grouped_objects/Xenium/zonegradient_v4_33roi1_500cells.rd")
+load("Grouped_objects/Xenium/zonegradient_v4_33roi2_500cells.rd")
+load("Grouped_objects/Xenium/zonegradient_v4_38roi1_500cells.rd")
+load("Grouped_objects/Xenium/zonegradient_v4_38roi2_500cells.rd")
 
 all_zones<-dplyr::bind_cols(zonecounts_33roi1[rownames(zonecounts_33roi1),],zonecounts_33roi2[rownames(zonecounts_33roi1),],
                             zonecounts_38roi1[rownames(zonecounts_33roi1),],zonecounts_38roi2[rownames(zonecounts_33roi1),] )
@@ -236,6 +236,7 @@ print(plot1+plot2)
 
 
 dev.off()
+
 
 
 
