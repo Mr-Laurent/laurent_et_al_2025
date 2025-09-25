@@ -1,6 +1,7 @@
 Future repository for figure codes
-<br/>
+--------------------------
 Each plot in each Figure has its own code
+<br/>
 <br/>
 The creation of metacell objects from enriched MNP samples (n=7) is done in Grouped_objects/setup_scripts_and_obj/Create_objects_IBD_EnrichedMNP.R
 <br/>
