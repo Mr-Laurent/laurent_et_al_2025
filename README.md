@@ -12,20 +12,28 @@ Object creation : to do
 
 Packages on R version 4.0.3
 
-Fig 1,2,3,4,S1 ------------------------
-
-anndata_0.7.5.6 
+affy_1.68.0 \n
+affyio_1.60.0 \n          
+anndata_0.7.5.6 \n
+AnnotationForge_1.32.0 
+Biobase_2.50.0
 ComplexHeatmap_2.6.2
 dplyr_1.0.7
 DT_0.19
-factoextra_1.0.7   
+factoextra_1.0.7 
+GEOquery_2.58.0  
 ggplot2_3.3.5
 ggprism_1.0.3
 ggpubr_0.4.0
 ggrastr_0.2.3
 heatmaply_1.2.1
+hgu133plus2.db_3.2.3
+hthgu133pluspm.db_12.1.0
 htmlwidgets_1.6.4
+human.db0_3.12.0
 Matrix_1.6-5 
+AnnotationForge_1.32.0 
+parallelDist_0.2.6 
 patchwork_1.3.0
 plotly_4.10.4
 progeny_1.12.0
@@ -40,6 +48,8 @@ scales_1.3.0
 tglkmeans ???
 tidyverse_1.3.1
 viridis_0.6.1
+
+
 
 
 
