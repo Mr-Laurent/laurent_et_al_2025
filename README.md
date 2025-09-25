@@ -12,14 +12,19 @@ Object creation : to do
 
 Packages on R version 4.0.3
 
-affy_1.68.0 \n
-affyio_1.60.0 \n          
-anndata_0.7.5.6 \n
-AnnotationForge_1.32.0 
+affy_1.68.0  \ 
+affyio_1.60.0 \        
+anndata_0.7.5.6 ## 
+AnnotationForge_1.32.0
+##
 Biobase_2.50.0
+##
 ComplexHeatmap_2.6.2
+<br />
 dplyr_1.0.7
+<br />
 DT_0.19
+<br />
 factoextra_1.0.7 
 GEOquery_2.58.0  
 ggplot2_3.3.5
