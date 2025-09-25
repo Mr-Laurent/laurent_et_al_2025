@@ -1,5 +1,17 @@
 Future repository for figure codes
+<br/>
+Each plot in each Figure has its own code
+<br/>
+The creation of metacell objects from enriched MNP samples (n=7) is done in Grouped_objects/setup_scripts_and_obj/Create_objects_IBD_EnrichedMNP.R
+<br/>
+The creation of metacell objects from total Lamina Propria samples (n=52) is done in Grouped_objects/setup_scripts_and_obj/Create_objects_IBD_TotalLP.R
+<br/>
+All shiny applications for scatterplot / boxplot / heatmap vizualisation are in "Viz_Apps"
 
+
+
+--------------------------
+<br/>
 Packages on R version 4.0.3
 
 affy_1.68.0
@@ -43,7 +55,7 @@ viridis_0.6.1
 
 
 
-
+<br/>
 Objects
 
 Fig 1 --------------------------
