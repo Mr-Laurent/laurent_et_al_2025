@@ -5,7 +5,7 @@ library(patchwork)
 library(ggpubr)
 library(rstatix)
 
-setwd("G:/Mon Drive/UG_metacells/Figures paper Aout/")
+
 dfinfo<-read.csv2(file="./Grouped_objects/sample_annots.csv",sep=",",header=T) # dfinfo has sample metadata: chemistry, sample, disease, location, etc informations
 colnames(dfinfo)[1]<-"sample"
 listobj<-c("df3hcco","df3hcil","df3CDuni","df3CD","df3UC") # The 5 conditions: healthy control (colon), healthy control (ileum), uninflamed ileum, inflamed ileum, inflamed colon 
@@ -118,9 +118,12 @@ Mono_names=c("Mono1","Mono3","Mono4","Mono5")
 Macs_names=c("Macro6","Macro7","Macro8","Macro9")
 
 # Order by condition were computed on the total cell composition
-df3hcil_o1<-c("214","226","216","218","217","235","227","220") # in Mo/Macs:"215" "225" "234" "236" HC are "After" treatment     "220" has 28 cells
-df3CDuni_o1<-c("68","192","189","159","195","208","129","186","180","135")   # in Mo/Macs:"129" has 28 cells
-df3CD_o1<-c("190","196","193","158","209","69","n7","n1","n3","n17","n47","n49","n6","n33","n37","128","138","187","181","n13")   # in Mo/Macs: n14 is removed, n49 has 2 cells, n6 has 23 cells
+# df3hcil_o1<-c("214","226","216","218","217","235","227","220") # in Mo/Macs:"215" "225" "234" "236" HC are "After" treatment     "220" has 28 cells
+df3hcil_o1<-c("218","235") # in Mo/Macs:"215" "225" "234" "236" HC are "After" treatment     "220" has 28 cells
+df3CDuni_o1<-c("68","192","189","159","195","186","180")   # in Mo/Macs:"129" has 28 cells
+# df3CDuni_o1<-c("68","192","189","159","195","208","129","186","180","135")   # in Mo/Macs:"129" has 28 cells
+df3CD_o1<-c("190","196","193","158","209","69","n7","n1","n3","n17","n47","n33","n37","128","138","187","181","n13")   # in Mo/Macs: n14 is removed, n49 has 2 cells, n6 has 23 cells
+# df3CD_o1<-c("190","196","193","158","209","69","n7","n1","n3","n17","n47","n49","n6","n33","n37","128","138","187","181","n13")   # in Mo/Macs: n14 is removed, n49 has 2 cells, n6 has 23 cells
 df3UC_o1<-c("238","200","198","202")
 df3hcco_o1<-c("237","219","221","204","206")
 
@@ -202,7 +205,8 @@ TL_prop_plot_gut_ann_smol<-function(celtypannot,df3){
     else if(listobj[i]=="df3CDuni"){df4$title="Uninfl.\nileum"}else if(listobj[i]=="df3UC"){df4$title="Inflam.\ncolon"}
     else if(listobj[i]=="df3CD"){df4$title="Inflamed\nileum"}else{df4$title="not found"}
     eval(parse(text=paste0("pt",i,"<-ggplot(df4,aes(x= sample,fill= Group)) +  geom_bar(position = 'fill')+
-  scale_fill_manual(values=celtypannot )+  
+  scale_fill_manual(values=celtypannot,labels=c('Mono1'='IFIM','Mono3'='IRM','Mono4'='Early Mono','Mono5'='Late Mono',
+                                                                     'Macro6'='IFN Macro','Macro7'='Infl. Macro','Macro8'='FOLR2- Macro','Macro9'='FOLR2+ Macro'))+  
   theme_classic()+labs( x = ' ', y = 'Proportion',fill = 'Celltype')+ 
                          scale_x_discrete(limits =",listobj[i],"_o1,labels=c('n1'='GIM7','n3'='GIM8','n6'='GIM21','n7'='GIM23','n13'='GIM31','n17'='GIM33','n33'='GIM35','n37'='GIM36','n47'='GIM38','n49'='GIM39'))+ 
                            theme(axis.text.y = element_text(size=rel(1.8)),axis.text.x = element_text(size=rel(1.5),angle = 90, hjust = 1, vjust = 0.5))")))
@@ -244,7 +248,7 @@ TL_prop_plot_gut_ann_smol<-function(celtypannot,df3){
 
 
 ###------------------------------------###
-# 30 cells doesn't work : too few cells to see plots in HC 
+# 30 cells threshold doesn't work : too few cells to see plots in HC 
 
 
 Mono_myc<-ht_clustering(ht,df_zmod)
@@ -264,11 +268,22 @@ Macs_plot15<-TL_prop_plot_gut_ann(Macs_celtypannot,Macs_df15)
 Macs_s_plot15<-TL_prop_plot_gut_ann_smol(Macs_celtypannot,Macs_df15)
 
 
-pdf("./Figure 2/Fig2A_MoMacTot_Prop_15.pdf",width = 9,height = 6)
-Mono_s_plot15$pt2_1+Mono_s_plot15$pt3_1+Mono_s_plot15$pt4_1+guides(fill= "none")+plot_layout(design = Mono_s_plot15$design_perso)
-Macs_s_plot15$pt2_1+Macs_s_plot15$pt3_1+Macs_s_plot15$pt4_1+guides(fill= "none")+plot_layout(design = Macs_s_plot15$design_perso)
-Mono_plot15$pt1_1+Mono_plot15$pt2_1+Mono_plot15$pt3_1+Mono_plot15$pt4_1+Mono_plot15$pt5_1+plot_layout(design = Mono_plot15$design_perso)
-Macs_plot15$pt1_1+Macs_plot15$pt2_1+Macs_plot15$pt3_1+Macs_plot15$pt4_1+Macs_plot15$pt5_1+plot_layout(design = Macs_plot15$design_perso)
+# Sorting only on IFIM %, not on the whole lineage distributions:
+protab<-prop.table(table(Mono_df15@df3CD$Group,Mono_df15@df3CD$sample),margin=2)
+df3CD_o1<-names(sort(protab["Mono1",]))
+
+df4<-Mono_df15@df3CD
+df4$Group<-factor(df4$Group,levels=Mono_df15@clust_ord)
+df4$title="Inflamed\nileum"
+
+
+pdf("./Figures_print/Fig2A_MoMacTot_Prop_15.pdf",width = 8,height = 6)
+print(ggplot(df4,aes(x= sample,fill= Group)) +  geom_bar(position = 'fill')+
+        scale_fill_manual(values=Mono_celtypannot)+  
+        theme_classic()+labs( x = ' ', y = 'Proportion',fill = 'Celltype')+ 
+        scale_x_discrete(limits =df3CD_o1,labels=c('n1'='GIM7','n3'='GIM8','n6'='GIM21','n7'='GIM23','n13'='GIM31','n17'='GIM33','n33'='GIM35','n37'='GIM36','n47'='GIM38','n49'='GIM39'))+ 
+        theme(axis.text.y = element_text(size=rel(1.8)),axis.text.x = element_text(size=rel(1.5),angle = 90, hjust = 1, vjust = 0.5))
+)
 dev.off()
 
 

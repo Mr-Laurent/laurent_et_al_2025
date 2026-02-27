@@ -1,8 +1,6 @@
-## First,, for each slide, we compute 
-
+## First, for each slide, we compute 
+library(ggplot2)
 library(ggpubr)
-
-setwd("G:/Mon Drive/UG_metacells/Figures paper Aout/")
 
 spl="GIM33_InfROI1"
 
@@ -208,6 +206,37 @@ save(tib_meta,file=paste0("./Grouped_objects/Xenium/tib_meta_v4_38roi2.rd"))
 
 #---------------------------------------------------------------------------------------------------------#
 
+Make_prism_barplot<-function(merged_df,title_name,yminerrbar){
+  df_sum <- merged_df %>%
+    group_by(condition) %>%
+    summarise(mean  = mean(value, na.rm = TRUE),
+              se    = sd(value, na.rm = TRUE) / sqrt(sum(!is.na(value))),
+              upper = mean + se,
+              lower = mean - se, .groups = "drop"  )
+  
+  ggplot() + geom_col( data = df_sum,
+                       aes(x = condition, y = mean, fill = condition, color = condition),
+                       alpha = 1,width = 0.8,size=1,
+                       position = position_dodge(width = 0.8)) +scale_color_manual(values = rep("black",7))+
+    geom_jitter(data = merged_df,aes(x = condition, y = value),shape=21, position=position_jitter(width = 0.20),size=3, fill="white",stroke=1.5) +
+    # geom_jitter(  data = merged_df,size = 2,
+    #               aes(x = condition, y = value, color = condition ), # shape = batch, 
+    #               position = position_jitterdodge(
+    #                 jitter.width = 0.20,jitter.height = 0,dodge.width = 0.8 )) +
+    geom_errorbar(data = df_sum, aes(x = condition, ymin =eval(parse(text=paste0(yminerrbar))), ymax = upper), width = 0.4, size = rel(1))+
+    scale_fill_manual(values = rep("black",7)) +
+    scale_x_discrete(limits = levels(merged_df$condition), labels= labels) +
+    ggtitle(title_name) + 
+    ggprism::theme_prism(base_size = 16)+ labs(y= title_name)+
+    theme(legend.position = "none",axis.title.x =element_blank(),axis.title.y =element_blank(),
+          axis.text.y = element_text(size=rel(2),margin = margin(0,8,0,0, unit = "points")),
+          axis.text.x = element_text(size=rel(2),angle=0,hjust=0.5,vjust=0.5),
+          axis.ticks.length.y = unit(15,"points"),axis.ticks.length.x = unit(7.5,"points"),
+          plot.margin = unit(c(20, 4, 4, 4),"points"))
+  
+}
+
+
 
 load("./Grouped_objects/Xenium/tib_meta_v4_33roi1.rd")
 tib_m33r1<-aggregate(tib_meta$num$CXCL9, by=list(tib_meta$grp), FUN=mean)
@@ -222,16 +251,22 @@ infl_gn<-do.call("rbind", list(tib_m33r1, tib_m33r2, tib_m38r1,tib_m38r2))
 colnames(infl_gn)<-c("sample_id","value")
 infl_gn$bin<-paste0("",gsub("(.*)_(.*)[a-z]$","\\2",infl_gn$sample_id))
 
-pdf(paste0("./Figure 4/Fig4C_bin_cxcl9_10.pdf"),width = 5,height = 7)
-ggplot(infl_gn, aes(x = factor(bin), y = value,  color="all",
-                             fill = "all")) +scale_y_continuous(trans = "log1p")+
-  geom_boxplot(width=0.8, size=0.95, alpha=0.8,outlier.alpha = 0) + geom_point(position = position_jitterdodge(jitter.width =0.2 ),size=rel(1.2), alpha=0.5 )+
-  labs(title = "CXCL9 expression in 'gradients'", x = "", y = "expression") +
-  theme_pubr()+theme(panel.grid.major = element_line(size=rel(1)),legend.title = element_blank(),legend.position = "none",
-                     text = element_text(size = 28),axis.title.x = element_text(size=18),
-                     title = element_text(size=18),
-                     axis.line = element_line(size = rel(1.5)), axis.ticks = element_line(size = rel(1.5)))+#guides(fill=guide_legend(nrow=2,byrow=TRUE))+
-  scale_fill_manual(values = alpha("#8E8EA3",4))+scale_color_manual(values = "#555568")
+# write.csv2(infl_gn,file="Gaelle_Fig4C_CXCL9_datapoints.csv",quote=F,row.names=F)
+
+pdf(paste0("./Figures_print/Fig4C_bin_cxcl9_10.pdf"),width = 3.5,height = 4.5)
+# ggplot(infl_gn, aes(x = factor(bin), y = value,  color="all",
+#                              fill = "all")) +scale_y_continuous(trans = "log1p")+
+#   geom_boxplot(width=0.8, size=0.95, alpha=0.8,outlier.alpha = 0) + geom_point(position = position_jitterdodge(jitter.width =0.2 ),size=rel(1.2), alpha=0.5 )+
+#   labs(title = "CXCL9 expression in 'gradients'", x = "", y = "expression") +
+#   theme_pubr()+theme(panel.grid.major = element_line(size=rel(1)),legend.title = element_blank(),legend.position = "none",
+#                      text = element_text(size = 28),axis.title.x = element_text(size=18),
+#                      title = element_text(size=18),
+#                      axis.line = element_line(size = rel(1.5)), axis.ticks = element_line(size = rel(1.5)))+#guides(fill=guide_legend(nrow=2,byrow=TRUE))+
+#   scale_fill_manual(values = alpha("#8E8EA3",4))+scale_color_manual(values = "#555568")
+
+infl_gn$condition<-infl_gn$bin
+print(Make_prism_barplot(merged_df=infl_gn, title_name="CXCL9",yminerrbar="mean")+
+        coord_cartesian(ylim = c(0, max(infl_gn$value)*1.1),clip = 'off') )
 
 load("./Grouped_objects/Xenium/tib_meta_v4_33roi1.rd")
 tib_m33r1<-aggregate(tib_meta$num$CXCL10, by=list(tib_meta$grp), FUN=mean)
@@ -246,14 +281,23 @@ infl_gn<-do.call("rbind", list(tib_m33r1, tib_m33r2, tib_m38r1,tib_m38r2))
 colnames(infl_gn)<-c("sample_id","value")
 infl_gn$bin<-paste0("",gsub("(.*)_(.*)[a-z]$","\\2",infl_gn$sample_id))
 
-ggplot(infl_gn, aes(x = factor(bin), y = value,  color="all",
-                    fill = "all")) +scale_y_continuous(trans = "log1p")+
-  geom_boxplot(width=0.8, size=0.95, alpha=0.8,outlier.alpha = 0) + geom_point(position = position_jitterdodge(jitter.width =0.2 ),size=rel(1.2), alpha=0.5 )+
-  labs(title = "CXCL10 expression in 'gradients'", x = "", y = "expression") +
-  theme_pubr()+theme(panel.grid.major = element_line(size=rel(1)),legend.title = element_blank(),legend.position = "none",
-                     text = element_text(size = 28),axis.title.x = element_text(size=18),
-                     title = element_text(size=18),
-                     axis.line = element_line(size = rel(1.5)), axis.ticks = element_line(size = rel(1.5)))+#guides(fill=guide_legend(nrow=2,byrow=TRUE))+
-  scale_fill_manual(values = alpha("#8E8EA3",4))+scale_color_manual(values = "#555568")
+# write.csv2(infl_gn,file="Gaelle_Fig4C_CXCL10_datapoints.csv",quote=F,row.names=F)
 
+# ggplot(infl_gn, aes(x = factor(bin), y = value,  color="all",
+#                     fill = "all")) +scale_y_continuous(trans = "log1p")+
+#   geom_boxplot(width=0.8, size=0.95, alpha=0.8,outlier.alpha = 0) + geom_point(position = position_jitterdodge(jitter.width =0.2 ),size=rel(1.2), alpha=0.5 )+
+#   labs(title = "CXCL10 expression in 'gradients'", x = "", y = "expression") +
+#   theme_pubr()+theme(panel.grid.major = element_line(size=rel(1)),legend.title = element_blank(),legend.position = "none",
+#                      text = element_text(size = 28),axis.title.x = element_text(size=18),
+#                      title = element_text(size=18),
+#                      axis.line = element_line(size = rel(1.5)), axis.ticks = element_line(size = rel(1.5)))+#guides(fill=guide_legend(nrow=2,byrow=TRUE))+
+#   scale_fill_manual(values = alpha("#8E8EA3",4))+scale_color_manual(values = "#555568")
+infl_gn$condition<-infl_gn$bin
+print(Make_prism_barplot(merged_df=infl_gn, title_name="CXCL10",yminerrbar="mean")+
+        coord_cartesian(ylim = c(0, max(infl_gn$value)*1.1),clip = 'off') )
 dev.off()
+
+
+
+
+

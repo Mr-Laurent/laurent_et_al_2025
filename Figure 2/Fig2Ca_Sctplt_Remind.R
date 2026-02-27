@@ -1,10 +1,10 @@
 library(Rfast)
 library(ggplot2)
 
-setwd("G:/Mon Drive/UG_metacells/Figures paper Aout/")
+
 # Load the metadata and count matrix from Ngollo cohort
-load("Grouped_objects/minipheno_AllezNgollo_postop_goodRemRec_sig.rd")
-load("Grouped_objects/matex_AllezNgollo_postop.rd")   
+load("Grouped_objects/RNAseq_REMIND/minipheno_AllezNgollo_postop_goodRemRec_sig.rd")
+load("Grouped_objects/RNAseq_REMIND/matex_AllezNgollo_postop.rd")   
 load("Grouped_objects/genelist_16nov22_Macs.rd")    
 minipheno$title<-gsub("^(\\w)(\\w)(_.*)$", "\\1_\\2\\3", minipheno$title)
 setdiff(minipheno$title,colnames(matex))
@@ -24,7 +24,7 @@ miniphenoCTRL<-minipheno[which(minipheno$`location:ch1`%in%c("Ctrl")),]
 
 
 todolist<-c("CTRL","M0I") 
-pdf(paste0("./Figure 2/Fig2Ca_Scatter.pdf"),width =6,height = 6)
+pdf(paste0("./Figures_print/Fig2Ca_Scatter.pdf"),width =6,height = 6.5)
 for (sub_set in todolist) {
   eval(parse(text=paste0("data_set=minipheno",sub_set)))
   plot_title=sub_set
@@ -75,5 +75,5 @@ format(p.adjust(c(format(spr_tst_u$p.value, scientific = T,digits = 3),
                     format(spr_tst_i$p.value, scientific = T,digits = 3)), 
                   method = "bonferroni"), scientific = T,digits = 3)  
   
-# "8.22e-03" "0.00e+00"
+# "8.46e-03" "0.00e+00"
   

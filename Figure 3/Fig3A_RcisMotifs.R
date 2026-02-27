@@ -4,7 +4,7 @@ library(htmlwidgets)
 library(ggplot2)
 library(Rfast)
 
-setwd("G:/Mon Drive/UG_metacells/Figures paper Aout/")
+
 load("./Grouped_objects/genelist_16nov22_Macs.rd")
 
 automate_strsplit <- function(df, col, indices) {

@@ -5,13 +5,13 @@ library(ggplot2)
 library(scales)
 library(Rfast)
 
-setwd("G:/Mon Drive/UG_metacells/Figures paper Aout/")
-load("Grouped_objects/MacsEnr_z_mymod_150_metadata_goodlog_v3.rd") # metadf_z     dataframe with module scores and scaled scores by metacells
+
+load("./Grouped_objects/MacsEnr_z_mymod_150_metadata_goodlog_v3.rd") # metadf_z     dataframe with module scores and scaled scores by metacells
 hm_zmod<-metadf_z[,154:303]
-load("Grouped_objects/df_mcall_50clust_16nov22_Macs.rd")  # df contains the metadatas: cell ID, metacell ID, sample of origin, cluster and lab of origin
-load("Grouped_objects/Macs_dgCmc_16nov22_counts.rd")      # dgcmtxcounts is the dgCMatrix (condensed) with counts by metacells
-load("Grouped_objects/genelist_16nov22_Macs.rd")          # genelist has the gene lists associated to each of the 150 modules 
-load("Grouped_objects/ht_Enrich_Macs.rd")                 # ht has the cluster + metacells order defined with ComplexHeatmap 
+load("./Grouped_objects/df_mcall_50clust_16nov22_Macs.rd")  # df contains the metadatas: cell ID, metacell ID, sample of origin, cluster and lab of origin
+load("./Grouped_objects/Macs_dgCmc_16nov22_counts.rd")      # dgcmtxcounts is the dgCMatrix (condensed) with counts by metacells
+load("./Grouped_objects/genelist_16nov22_Macs.rd")          # genelist has the gene lists associated to each of the 150 modules 
+load("./Grouped_objects/ht_Enrich_Macs.rd")                 # ht has the cluster + metacells order defined with ComplexHeatmap 
 colnames(hm_zmod)<-gsub("scaled","",colnames(hm_zmod))
 
 
@@ -113,15 +113,23 @@ clnmord2<-paste0("cluster",c(6,40,2,33,39,38,37,34,35,36,3,9,11,25,4,13,7,8,5,10
 ord_sig_perso2<-c("Siggrp_X","Siggrp_XI","Siggrp_XII","Siggrp_I","Siggrp_III","Siggrp_IV","Siggrp_VI",
                   "Siggrp_II","Siggrp_XVI","Siggrp_XVII","Siggrp_XV","Siggrp_XIV","Siggrp_XIII","Siggrp_IX","Siggrp_VIII","Siggrp_VII","Siggrp_V")
 
+
+
 # Print the figure
-pdf("./Figure 1/Fig1B_HM.pdf",height =10,width = 6.8)
-plot_reorderselectedrow_selectedcol+
-  scale_x_discrete(limits = ord_sig_perso2,position = "top", labels=gsub("Siggrp_","",ord_sig_perso2))+
-  scale_y_discrete(limits = rev(clnmord2),                   labels=gsub("cluster","",rev(clnmord2)) )+
-  theme(axis.text.y =element_text(size = rel(1.5),face="bold"),
-        axis.text.x =element_text(hjust=0.5,angle = 0,size = rel(1.25),face="bold"),
+lab_alt1<-c("Program X","Program XI","XII   Immunoreg./Repair","I      Transition A",
+            "Program III","IV    Transition B","VI    Transition C","II     OXPHOS",
+            "XVI  HSF","XVII Hypoxia","XV   IFIM program","XIV  Inflammatory B",
+            "XIII  Inflammatory A","IX    IFN","VIII  MonoB","VII   MonoA","V     Macrophage")
+pdf("./Figures_print/Fig1B_HM.pdf",height =6.5,width = 8)
+plot_reorderselectedrow_selectedcol+ coord_flip()+
+  scale_x_discrete(limits = ord_sig_perso2,position = "top", labels=lab_alt1 )+
+  scale_y_discrete(limits = (clnmord2),                   labels=gsub("cluster","",clnmord2) )+
+  theme(axis.text.y =element_text(size = rel(1.5),face="bold", hjust=0.5),
+        axis.text.x =element_text(hjust=1,vjust=0.4,angle = 90,size = rel(0.75),face="bold"),
         axis.title.x = element_blank(),
-        axis.title.y = element_blank()  )+
+        axis.title.y = element_blank()  )+ 
   ggtitle("Relative enrichment of signatures by clusters \n(Macs from enriched samples, manual reordering)")
 dev.off()
+
+
 
